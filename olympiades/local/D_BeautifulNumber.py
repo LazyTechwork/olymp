@@ -21,7 +21,8 @@ def find_beauty(a):
 
 n = int(input())
 beauties = {}
-inp = list(map(int, input().split()))
+inp = list(sorted(map(int, input().split())))
+
 for i in inp:
     if not (i in beauties.keys()):
         beauties[i] = find_beauty(i)
