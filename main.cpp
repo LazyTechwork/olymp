@@ -3,43 +3,23 @@
 using namespace std;
 
 int main() {
-    unsigned int n, m;
-    cin >> n >> m;
-    unsigned int durations[n];
-    unsigned int cache[n];
-    unsigned int results[m];
-    for (int i = 0; i < n; ++i) {
-        unsigned int cnt, dur;
-        cin >> cnt >> dur;
-        durations[i] = cnt * dur;
+    int input[3];
+    cin >> input[0] >> input[1] >> input[2];
+    int n = sizeof(input) / sizeof(input[0]);
+    int a = *min_element(input, input + n),
+            c = *max_element(input, input + n),
+            b = accumulate(input, input + n, 0) - a - c;
+    int answer = 0;
+
+    if (abs(b - c) > a) {
+        answer = a + b;
+    } else {
+        answer += c - b;
+        a -= c - b;
+        if (a % 2 == 0)
+            answer += a + b - int(round(a / 2));
+        else
+            answer += a + b - int(round((a + 1) / 2));
     }
-    cache[0] = durations[0];
-    for (int i = 1; i < n; ++i)
-        cache[i] = cache[i - 1] + durations[i];
-
-
-    for (int i = 0; i < m; ++i) {
-        unsigned int moment, l = 0, r = n - 1, c = r / 2;
-        cin >> moment;
-        if (moment <= cache[0])
-            results[i] = 1;
-        else if (n > 2 && moment > cache[n - 2])
-            results[i] = n;
-        else {
-            while (!(moment <= cache[c] && moment > cache[c - 1])) {
-                if (moment > cache[c])
-                    l = c;
-                else
-                    r = c;
-                c = (l + r) / 2;
-            }
-            results[i] = c + 1;
-        }
-    }
-
-    for (int i = 0; i < m; ++i) {
-        cout << results[i] << endl;
-    }
-
-    return 0;
+    cout << answer;
 }
